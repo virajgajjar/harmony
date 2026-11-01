@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  
+  <!-- iPhone Home Screen Web App Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="11 · 02 · 27 ♥" />
+  <meta name="theme-color" content="#FFF9FA" id="theme-color-meta" />
+  
+  <title>11 · 02 · 27 ♥</title>
+
+  <!-- Google Fonts: Cormorant Garamond (Refined Serif) & Plus Jakarta Sans (Clean Minimalist Labels) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+      --bg-primary: #FFF9FA;
+      --text-primary: #4A353B;
+      --text-secondary: #9E7682;
+      --accent-glow: #E88D96;
+      --card-bg: rgba(255, 255, 255, 0.56);
+      --card-border: rgba(255, 255, 255, 0.88);
+      --card-shadow: 0 24px 60px -12px rgba(232, 141, 150, 0.22), 0 4px 16px -2px rgba(255, 194, 209, 0.18);
+      --pill-bg: rgba(255, 255, 255, 0.82);
+    }
+
+    /* Theme 1: Rosewater & Peony (Luminous Blush, Coral-Peach & Fresh Mint) */
+    body[data-theme="botanical"] {
+      --bg-primary: #FFF9FA;
+      --text-primary: #4A353B;
+      --text-secondary: #9E7682;
+      --accent-glow: #E88D96;
+      --card-bg: rgba(255, 255, 255, 0.56);
+      --card-border: rgba(255, 255, 255, 0.90);
+      --card-shadow: 0 26px 65px -12px rgba(232, 141, 150, 0.24), 0 6px 20px -4px rgba(255, 182, 193, 0.2);
+      --pill-bg: rgba(255, 255, 255, 0.84);
+    }
+
+    /* Theme 2: Sunset Sorbet Aura (Vibrant Pastel Lilac, Apricot Nectar & Buttercream) */
+    body[data-theme="aura"] {
+      --bg-primary: #FFFDF9;
+      --text-primary: #46374E;
+      --text-secondary: #8F759E;
+      --accent-glow: #E58C9A;
+      --card-bg: rgba(255, 255, 255, 0.44);
+      --card-border: rgba(255, 255, 255, 0.82);
+      --card-shadow: 0 26px 65px -12px rgba(186, 148, 214, 0.25), 0 6px 20px -4px rgba(255, 185, 160, 0.2);
+      --pill-bg: rgba(255, 255, 255, 0.78);
+    }
+
+    /* Theme 3: Terracotta & Marigold Silk (Sunlit Peach, Rose-Berry & Marigold Honey) */
+    body[data-theme="linen"] {
+      --bg-primary: #FFF9F2;
+      --text-primary: #523634;
+      --text-secondary: #A4716E;
+      --accent-glow: #DF828C;
+      --card-bg: rgba(255, 252, 249, 0.52);
+      --card-border: rgba(255, 255, 255, 0.86);
+      --card-shadow: 0 26px 60px -12px rgba(226, 138, 125, 0.24), 0 6px 20px -4px rgba(255, 210, 150, 0.2);
+      --pill-bg: rgba(255, 253, 250, 0.84);
+    }
+
+    * {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      transition: background-color 0.9s cubic-bezier(0.22, 1, 0.36, 1), color 0.9s ease;
+      position: fixed;
+      inset: 0;
+    }
+
+    .font-serif-display {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-feature-settings: "lnum" 1, "tnum" 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Safe Area Support for iPhone Notch / Dynamic Island & Home Indicator */
+    .safe-layout {
+      height: 100dvh;
+      padding-top: max(1.5rem, env(safe-area-inset-top));
+      padding-bottom: max(2rem, env(safe-area-inset-bottom));
+      padding-left: max(1.25rem, env(safe-area-inset-left));
+      padding-right: max(1.25rem, env(safe-area-inset-right));
+    }
+
+    /* Frosted Countdown Card */
+    .countdown-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(26px) saturate(140%);
+      -webkit-backdrop-filter: blur(26px) saturate(140%);
+      border: 1.5px solid var(--card-border);
+      box-shadow: var(--card-shadow);
+      transition: all 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .countdown-card.pulse-gentle {
+      transform: scale(1.022);
+      box-shadow: 0 30px 70px -10px rgba(232, 141, 150, 0.38);
+    }
+
+    /* Theme Background Layers */
+    .theme-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 1;
+    }
+
+    body[data-theme="botanical"] #layer-botanical,
+    body[data-theme="aura"] #layer-aura,
+    body[data-theme="linen"] #layer-linen {
+      opacity: 1;
+    }
+
+    /* Ambient Mesh Gradient Animations */
+    @keyframes floatAura1 {
+      0%, 100% { transform: translate(0%, 0%) scale(1); }
+      33% { transform: translate(9%, -7%) scale(1.1); }
+      66% { transform: translate(-6%, 8%) scale(0.95); }
+    }
+    @keyframes floatAura2 {
+      0%, 100% { transform: translate(0%, 0%) scale(1); }
+      33% { transform: translate(-8%, 9%) scale(1.08); }
+      66% { transform: translate(7%, -6%) scale(0.94); }
+    }
+    @keyframes floatAura3 {
+      0%, 100% { transform: translate(0%, 0%) scale(1); }
+      50% { transform: translate(6%, 7%) scale(1.12); }
+    }
+
+    .aura-blob-1 { animation: floatAura1 14s ease-in-out infinite; }
+    .aura-blob-2 { animation: floatAura2 18s ease-in-out infinite; }
+    .aura-blob-3 { animation: floatAura3 16s ease-in-out infinite; }
+
+    /* Gentle Sway for Botanical SVG */
+    @keyframes gentleBreeze {
+      0%, 100% { transform: rotate(0deg) translateY(0px); }
+      50% { transform: rotate(1.6deg) translateY(-5px); }
+    }
+    .botanical-sway {
+      transform-origin: center center;
+      animation: gentleBreeze 10s ease-in-out infinite;
+    }
+    .botanical-sway-reverse {
+      transform-origin: center center;
+      animation: gentleBreeze 12s ease-in-out infinite reverse;
+    }
+
+    /* Subtle Silk Grain Overlay for Theme 3 */
+    .linen-grain {
+      background-image: radial-gradient(rgba(215, 130, 120, 0.06) 1px, transparent 0);
+      background-size: 16px 16px;
+    }
+
+    /* Cute Tactile Button */
+    .cute-trigger-btn {
+      background: var(--pill-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1.5px solid var(--card-border);
+      box-shadow: 0 12px 28px -6px rgba(232, 141, 150, 0.30), 0 0 0 4px rgba(255, 255, 255, 0.35);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, background 0.5s ease;
+    }
+    .cute-trigger-btn:active {
+      transform: scale(0.88);
+    }
+
+    @keyframes heartBeatSoft {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    .heart-pulse {
+      animation: heartBeatSoft 2.6s ease-in-out infinite;
+    }
+
+    /* Whisper Note Floating Pill */
+    .whisper-pill {
+      background: var(--pill-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 10px 28px -6px rgba(220, 135, 145, 0.22);
+      transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .whisper-hidden {
+      opacity: 0;
+      transform: translateY(10px) scale(0.96);
+      pointer-events: none;
+    }
+    .whisper-visible {
+      opacity: 1;
+      transform: translateY(0px) scale(1);
+    }
+
+    /* Theme Switcher Dots */
+    .theme-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 9999px;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, opacity 0.3s ease;
+      opacity: 0.65;
+      cursor: pointer;
+    }
+    .theme-dot.active {
+      opacity: 1;
+      transform: scale(1.28);
+      box-shadow: 0 0 0 2.5px rgba(255, 255, 255, 0.95), 0 3px 8px rgba(220, 120, 140, 0.28);
+    }
+
+    /* Subtle Colon Pulse */
+    @keyframes softBlink {
+      0%, 100% { opacity: 0.65; }
+      50% { opacity: 0.22; }
+    }
+    .colon-sep {
+      animation: softBlink 2.8s ease-in-out infinite;
+      color: var(--accent-glow);
+    }
+  </style>
+</head>
+
+<body data-theme="botanical">
+
+  <!-- ==========================================
+       CONFIGURABLE SETTINGS (TOP OF SCRIPT BELOW)
+       ========================================== -->
+
+  <!-- CANVAS FOR LUMINOUS PASTEL PETAL & HEART PHYSICS BURST -->
+  <canvas id="petal-canvas" class="fixed inset-0 pointer-events-none z-30"></canvas>
+
+  <!-- ==========================================
+       THEME 1: ROSEWATER & PEONY (DEFAULT)
+       ========================================== -->
+  <div id="layer-botanical" class="theme-layer overflow-hidden flex items-center justify-center">
+    <!-- Luminous Warm Blush, Coral-Peach & Fresh Mint Ambient Orbs -->
+    <div class="aura-blob-1 absolute -top-12 -left-14 w-80 h-80 rounded-full opacity-80 blur-[56px]" style="background: #FFD1DC;"></div>
+    <div class="aura-blob-2 absolute top-[22%] -right-16 w-72 h-72 rounded-full opacity-75 blur-[54px]" style="background: #FFD8C4;"></div>
+    <div class="aura-blob-3 absolute -bottom-14 left-6 w-80 h-80 rounded-full opacity-75 blur-[58px]" style="background: #CBF3E6;"></div>
+    <div class="absolute bottom-[18%] right-8 w-56 h-56 rounded-full opacity-60 blur-[50px]" style="background: #FFEAA7;"></div>
+
+    <!-- Delicate Minimalist Botanical Line Art framing the center card -->
+    <div class="relative w-full max-w-[360px] h-[440px] flex items-center justify-center">
+      <!-- Top Botanical Sprigs -->
+      <svg class="botanical-sway absolute -top-14 w-[315px] h-[185px] opacity-90" viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Left Mint-Sage Branch -->
+        <path d="M135 165 C115 125, 85 95, 45 65" stroke="#5EA893" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M115 130 C112 108, 125 95, 132 105 C138 114, 122 128, 115 130 Z" stroke="#5EA893" stroke-width="1.1" fill="#A3E4D1" fill-opacity="0.45"/>
+        <path d="M92 105 C72 108, 62 96, 70 86 C78 76, 90 92, 92 105 Z" stroke="#5EA893" stroke-width="1.1" fill="#A3E4D1" fill-opacity="0.45"/>
+        <path d="M70 84 C68 64, 80 54, 88 64 C94 72, 78 82, 70 84 Z" stroke="#5EA893" stroke-width="1.1" fill="#A3E4D1" fill-opacity="0.45"/>
+        <path d="M45 65 C30 62, 26 50, 36 44 C46 38, 50 56, 45 65 Z" stroke="#5EA893" stroke-width="1.1" fill="#A3E4D1" fill-opacity="0.45"/>
+        <!-- Center Peony Blossom -->
+        <path d="M162 168 C160 130, 165 95, 168 62" stroke="#E07A88" stroke-width="1.25" stroke-linecap="round"/>
+        <path d="M168 62 C154 46, 158 32, 168 42 C178 32, 182 46, 168 62 Z" stroke="#E07A88" stroke-width="1.15" fill="#FF9EB1" fill-opacity="0.55"/>
+        <path d="M168 62 C150 56, 146 42, 158 46" stroke="#E07A88" stroke-width="1.15" fill="#FFB8C6" fill-opacity="0.48"/>
+        <path d="M168 62 C186 56, 190 42, 178 46" stroke="#E07A88" stroke-width="1.15" fill="#FFB8C6" fill-opacity="0.48"/>
+        <!-- Right Mint-Sage & Peach Branch -->
+        <path d="M190 165 C210 125, 240 92, 275 58" stroke="#5EA893" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M212 128 C216 106, 202 94, 195 104 C188 112, 204 126, 212 128 Z" stroke="#5EA893" stroke-width="1.1" fill="#A3E4D1" fill-opacity="0.45"/>
+        <path d="M235 100 C255 104, 265 92, 256 82 C248 72, 236 88, 235 100 Z" stroke="#E8937E" stroke-width="1.1" fill="#FFC2B4" fill-opacity="0.5"/>
+        <path d="M255 78 C256 58, 244 48, 236 58 C230 66, 246 76, 255 78 Z" stroke="#5EA893" stroke-width="1.1" fill="#A3E4D1" fill-opacity="0.45"/>
+      </svg>
+
+      <!-- Bottom Botanical Sprigs -->
+      <svg class="botanical-sway-reverse absolute -bottom-14 w-[315px] h-[185px] opacity-90" viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M140 15 C118 55, 88 85, 48 115" stroke="#5EA893" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M118 50 C115 72, 128 85, 135 75 C141 66, 125 52, 118 50 Z" stroke="#5EA893" stroke-width="1.1" fill="#A3E4D1" fill-opacity="0.45"/>
+        <path d="M90 78 C70 75, 60 87, 68 97 C76 107, 88 91, 90 78 Z" stroke="#E8937E" stroke-width="1.1" fill="#FFC2B4" fill-opacity="0.5"/>
+        <!-- Soft Peony Buds -->
+        <path d="M160 12 C162 50, 158 85, 154 118" stroke="#E07A88" stroke-width="1.25" stroke-linecap="round"/>
+        <path d="M154 118 C140 134, 144 148, 154 138 C164 148, 168 134, 154 118 Z" stroke="#E07A88" stroke-width="1.15" fill="#FF9EB1" fill-opacity="0.55"/>
+        <!-- Right Branch -->
+        <path d="M185 15 C208 55, 238 88, 272 122" stroke="#5EA893" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M210 52 C214 74, 200 86, 193 76 C186 68, 202 54, 210 52 Z" stroke="#5EA893" stroke-width="1.1" fill="#A3E4D1" fill-opacity="0.45"/>
+        <path d="M238 82 C258 78, 268 90, 259 100 C251 110, 239 94, 238 82 Z" stroke="#5EA893" stroke-width="1.1" fill="#A3E4D1" fill-opacity="0.45"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       THEME 2: SUNSET SORBET AURA
+       ========================================== -->
+  <div id="layer-aura" class="theme-layer overflow-hidden">
+    <div class="aura-blob-1 absolute top-[4%] left-[-12%] w-80 h-80 rounded-full opacity-90 blur-[58px]" style="background: #DCC2FF;"></div>
+    <div class="aura-blob-2 absolute top-[26%] right-[-14%] w-80 h-80 rounded-full opacity-90 blur-[58px]" style="background: #FFBAA3;"></div>
+    <div class="aura-blob-3 absolute bottom-[6%] left-[6%] w-80 h-80 rounded-full opacity-85 blur-[58px]" style="background: #FFE999;"></div>
+    <div class="aura-blob-1 absolute bottom-[22%] right-[8%] w-72 h-72 rounded-full opacity-85 blur-[54px]" style="background: #FFB5CE;"></div>
+  </div>
+
+  <!-- ==========================================
+       THEME 3: TERRACOTTA & MARIGOLD SILK
+       ========================================== -->
+  <div id="layer-linen" class="theme-layer overflow-hidden linen-grain">
+    <!-- Top Left Rose-Berry & Marigold Silk Shapes -->
+    <svg class="aura-blob-1 absolute -top-14 -left-14 w-80 h-80 opacity-80" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#F497A6" d="M48.2,-64.1C62.6,-53.4,74.5,-39.1,79.2,-22.6C83.9,-6.1,81.4,12.6,73.1,28.2C64.8,43.8,50.7,56.3,34.7,63.9C18.7,71.5,0.8,74.2,-17.1,71.8C-35,69.4,-52.9,61.9,-64.4,48.5C-75.9,35.1,-81,15.8,-79.1,-2.4C-77.2,-20.6,-68.3,-37.7,-55.1,-48.6C-41.9,-59.5,-24.4,-64.2,-6.6,-56.3C11.2,-48.4,33.8,-74.8,48.2,-64.1Z" transform="translate(100 100)" />
+    </svg>
+    <svg class="aura-blob-3 absolute top-12 -right-20 w-72 h-72 opacity-75" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#FFE094" d="M41.9,-55.8C55.4,-46.3,68.2,-35.1,73.5,-20.7C78.8,-6.3,76.6,11.3,69.2,26.4C61.8,41.5,49.2,54.1,34.3,62.3C19.4,70.5,2.2,74.3,-14.8,72.1C-31.8,69.9,-48.6,61.7,-60.1,48.3C-71.6,34.9,-77.8,16.3,-76.3,-1.3C-74.8,-18.9,-65.6,-35.5,-52.8,-45.2C-40,-54.9,-23.6,-57.7,-7.3,-49C9,-40.3,28.4,-65.3,41.9,-55.8Z" transform="translate(100 100)" />
+    </svg>
+    <!-- Bottom Right Sunlit Peach & Coral Silk Shapes -->
+    <svg class="aura-blob-2 absolute -bottom-16 -right-14 w-80 h-80 opacity-80" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#FFB899" d="M41.9,-55.8C55.4,-46.3,68.2,-35.1,73.5,-20.7C78.8,-6.3,76.6,11.3,69.2,26.4C61.8,41.5,49.2,54.1,34.3,62.3C19.4,70.5,2.2,74.3,-14.8,72.1C-31.8,69.9,-48.6,61.7,-60.1,48.3C-71.6,34.9,-77.8,16.3,-76.3,-1.3C-74.8,-18.9,-65.6,-35.5,-52.8,-45.2C-40,-54.9,-23.6,-57.7,-7.3,-49C9,-40.3,28.4,-65.3,41.9,-55.8Z" transform="translate(100 100)" />
+    </svg>
+    <svg class="absolute -bottom-20 -left-16 w-72 h-72 opacity-70" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#F6B6C3" d="M37.5,-49.2C50.2,-40.5,63.2,-30.8,68.8,-17.5C74.4,-4.2,72.6,12.7,65.2,26.8C57.8,40.9,44.8,52.2,29.9,59.3C15,66.4,-1.8,69.3,-18.2,66.2C-34.6,63.1,-50.6,54,-60.1,40.3C-69.6,26.6,-72.6,8.3,-69.8,-8.6C-67,-25.5,-58.4,-41,-45.8,-49.8C-33.2,-58.6,-16.6,-60.7,-1.4,-59C13.8,-57.3,24.8,-57.9,37.5,-49.2Z" transform="translate(100 100)" />
+    </svg>
+  </div>
+
+  <!-- ==========================================
+       FOREGROUND INTERACTIVE UI (CENTERED IPHONE FRAME)
+       ========================================== -->
+  <main class="safe-layout relative z-20 w-full max-w-md mx-auto flex flex-col items-center justify-between">
+
+    <!-- 1. TOP BAR: DELICATE INTERTWINED RINGS & SUBTLE 3-DOT THEME SWITCHER -->
+    <header class="w-full flex items-center justify-between px-2 pt-1">
+      <!-- Invisible spacer to keep center icon perfectly balanced -->
+      <div class="w-16"></div>
+
+      <!-- Minimalist Intertwined Wedding Rings Icon with Rose-Gold Glow -->
+      <div class="flex flex-col items-center opacity-85" style="color: var(--accent-glow);">
+        <svg width="38" height="24" viewBox="0 0 36 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="13.5" cy="11.5" r="7.5" stroke="currentColor" stroke-width="1.35" />
+          <circle cx="22.5" cy="11.5" r="7.5" stroke="currentColor" stroke-width="1.35" />
+          <!-- Tiny diamond/sparkle accent on top of left ring -->
+          <path d="M13.5 1.2 L14.7 3.2 L13.5 4.3 L12.3 3.2 Z" fill="currentColor" />
+        </svg>
+      </div>
+
+      <!-- Subtle 3-Dot Luminous Pastel Palette Switcher -->
+      <div class="w-16 flex items-center justify-end gap-2.5" aria-label="Theme Palette">
+        <button
+          type="button"
+          class="theme-dot active"
+          style="background: linear-gradient(135deg, #FF9EB1 50%, #88DFC6 50%);"
+          data-set-theme="botanical"
+          title="Rosewater & Peony"
+          aria-label="Rosewater & Peony Theme"
+        ></button>
+        <button
+          type="button"
+          class="theme-dot"
+          style="background: linear-gradient(135deg, #CFA8FF 50%, #FFAE94 50%);"
+          data-set-theme="aura"
+          title="Sunset Sorbet Aura"
+          aria-label="Sunset Sorbet Aura Theme"
+        ></button>
+        <button
+          type="button"
+          class="theme-dot"
+          style="background: linear-gradient(135deg, #F497A6 50%, #FFD67A 50%);"
+          data-set-theme="linen"
+          title="Terracotta & Marigold"
+          aria-label="Terracotta & Marigold Theme"
+        ></button>
+      </div>
+    </header>
+
+    <!-- 2. CENTER: PROMINENT FROSTED-GLASS LIVE COUNTDOWN CARD -->
+    <section class="w-full flex flex-col items-center justify-center my-auto px-1">
+      <div
+        id="countdown-card"
+        class="countdown-card w-full rounded-[32px] px-5 py-10 sm:px-7 sm:py-12 flex flex-col items-center justify-center text-center"
+      >
+        <!-- Subtle Top Heart Emblem -->
+        <div class="mb-4" style="color: var(--accent-glow);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </div>
+
+        <!-- Large Serif Countdown Row: DAYS : HOURS : MINS : SECS -->
+        <div class="w-full flex items-baseline justify-center gap-1.5 sm:gap-3">
+          
+          <!-- DAYS -->
+          <div class="flex flex-col items-center min-w-[68px] sm:min-w-[80px]">
+            <span id="cd-days" class="font-serif-display text-5xl sm:text-6xl font-normal tracking-tight leading-none">
+              101
+            </span>
+            <span class="mt-2.5 text-[10px] tracking-[0.25em] uppercase opacity-65 font-medium">
+              d
+            </span>
+          </div>
+
+          <span class="colon-sep font-serif-display text-3xl sm:text-4xl -translate-y-4 select-none">:</span>
+
+          <!-- HOURS -->
+          <div class="flex flex-col items-center min-w-[54px] sm:min-w-[64px]">
+            <span id="cd-hours" class="font-serif-display text-5xl sm:text-6xl font-normal tracking-tight leading-none">
+              03
+            </span>
+            <span class="mt-2.5 text-[10px] tracking-[0.25em] uppercase opacity-65 font-medium">
+              h
+            </span>
+          </div>
+
+          <span class="colon-sep font-serif-display text-3xl sm:text-4xl -translate-y-4 select-none">:</span>
+
+          <!-- MINS -->
+          <div class="flex flex-col items-center min-w-[54px] sm:min-w-[64px]">
+            <span id="cd-mins" class="font-serif-display text-5xl sm:text-6xl font-normal tracking-tight leading-none">
+              39
+            </span>
+            <span class="mt-2.5 text-[10px] tracking-[0.25em] uppercase opacity-65 font-medium">
+              m
+            </span>
+          </div>
+
+          <span class="colon-sep font-serif-display text-3xl sm:text-4xl -translate-y-4 select-none">:</span>
+
+          <!-- SECS -->
+          <div class="flex flex-col items-center min-w-[54px] sm:min-w-[64px]">
+            <span id="cd-secs" class="font-serif-display text-5xl sm:text-6xl font-normal tracking-tight leading-none">
+              00
+            </span>
+            <span class="mt-2.5 text-[10px] tracking-[0.25em] uppercase opacity-65 font-medium">
+              s
+            </span>
+          </div>
+
+        </div>
+
+        <!-- Subtle Date Numeric Stamp (Minimalist, Almost Zero Words) -->
+        <div class="mt-7 pt-4 border-t border-white/60 flex items-center justify-center gap-2.5">
+          <span class="w-1.5 h-1.5 rounded-full opacity-60" style="background: var(--accent-glow);"></span>
+          <span class="text-[11px] tracking-[0.34em] font-light opacity-75">
+            11 · 02 · 27
+          </span>
+          <span class="w-1.5 h-1.5 rounded-full opacity-60" style="background: var(--accent-glow);"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. BOTTOM: FLOATING WHISPER PILL + SINGLE CUTE SURPRISE BUTTON -->
+    <footer class="w-full flex flex-col items-center justify-end gap-3.5 pb-1">
+      
+      <!-- Whisper-Short Rotating Sweet Note Pill -->
+      <div
+        id="whisper-pill"
+        class="whisper-pill whisper-hidden px-4 py-1.5 rounded-full"
+        aria-live="polite"
+      >
+        <p id="whisper-text" class="font-serif-display italic text-base sm:text-lg tracking-wide">
+          forever starts soon ♥
+        </p>
+      </div>
+
+      <!-- Single Tactile Cute Button -->
+      <button
+        id="cute-btn"
+        type="button"
+        class="cute-trigger-btn w-13 h-13 p-3.5 rounded-full flex items-center justify-center focus:outline-none"
+        aria-label="Send love"
+      >
+        <svg
+          id="cute-icon"
+          class="w-5 h-5 heart-pulse transition-transform duration-300"
+          style="color: #E87A88;"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </button>
+
+    </footer>
+
+  </main>
+
+  <!-- ==========================================
+       APPLICATION LOGIC (COUNTDOWN, THEMES, PETALS)
+       ========================================== -->
+  <script>
+    /******************************************************************
+     * 1. WEDDING DATE (FEB 11, 2027 IST) & SWEET WHISPERS
+     ******************************************************************/
+    const WEDDING_DATE_ISO = "2027-02-11T00:00:00+05:30";
+
+    const SWEET_WHISPERS = [
+      "can't wait to marry you",
+      "my favorite person ♥",
+      "11 · 02 · 2027 ✨",
+      "forever starts soon",
+      "almost Mrs. ♥",
+      "you & me, always",
+      "so lucky it's you ✨",
+      "my whole heart ♥"
+    ];
+
+    /******************************************************************
+     * 2. LIVE COUNTDOWN TIMER
+     ******************************************************************/
+    const elDays  = document.getElementById("cd-days");
+    const elHours = document.getElementById("cd-hours");
+    const elMins  = document.getElementById("cd-mins");
+    const elSecs  = document.getElementById("cd-secs");
+
+    const targetTimestamp = new Date(WEDDING_DATE_ISO).getTime();
+
+    function pad2(num) {
+      return String(num).padStart(2, "0");
+    }
+
+    function updateCountdown() {
+      const now = Date.now();
+      const diff = Math.max(0, targetTimestamp - now);
+
+      const days  = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const mins  = Math.floor((diff / 1000 / 60) % 60);
+      const secs  = Math.floor((diff / 1000) % 60);
+
+      elDays.textContent  = days;
+      elHours.textContent = pad2(hours);
+      elMins.textContent  = pad2(mins);
+      elSecs.textContent  = pad2(secs);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    /******************************************************************
+     * 3. 3-DOT LUMINOUS PASTEL THEME SWITCHER
+     ******************************************************************/
+    const themeDots = document.querySelectorAll("[data-set-theme]");
+    const themeMeta = document.getElementById("theme-color-meta");
+
+    const THEME_META_COLORS = {
+      botanical: "#FFF9FA",
+      aura: "#FFFDF9",
+      linen: "#FFF9F2"
+    };
+
+    themeDots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        const chosen = dot.getAttribute("data-set-theme");
+        document.body.setAttribute("data-theme", chosen);
+
+        themeDots.forEach((d) => d.classList.remove("active"));
+        dot.classList.add("active");
+
+        if (themeMeta && THEME_META_COLORS[chosen]) {
+          themeMeta.setAttribute("content", THEME_META_COLORS[chosen]);
+        }
+      });
+    });
+
+    /******************************************************************
+     * 4. CUTE SURPRISE BUTTON: WHISPER PILL + LUMINOUS PETAL & HEART BURST
+     ******************************************************************/
+    const cuteBtn       = document.getElementById("cute-btn");
+    const cuteIcon      = document.getElementById("cute-icon");
+    const whisperPill   = document.getElementById("whisper-pill");
+    const whisperText   = document.getElementById("whisper-text");
+    const countdownCard = document.getElementById("countdown-card");
+    const canvas        = document.getElementById("petal-canvas");
+    const ctx           = canvas.getContext("2d");
+
+    let whisperIndex = -1;
+    let whisperTimer = null;
+    let particles    = [];
+    let animFrameId  = null;
+
+    function resizeCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width  = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width  = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    // Luminous, cheerful pastel palette for floating petals & hearts
+    const PETAL_COLORS = [
+      "#FF8FA3", // Luminous rose pink
+      "#FFB3C1", // Peony blush
+      "#FFB59E", // Sun-kissed coral peach
+      "#CFA8FF", // Pastel lilac-lavender
+      "#88DFC6", // Fresh mint-sage
+      "#FFE082", // Marigold buttercream sparkle
+      "#FF9EAA"  // Sweet strawberry pastel
+    ];
+
+    function spawnPetalBurst(originX, originY) {
+      const count = 30;
+      for (let i = 0; i < count; i++) {
+        const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.5;
+        const speed = 3.0 + Math.random() * 5.6;
+        const isHeart = Math.random() < 0.48;
+
+        particles.push({
+          x: originX,
+          y: originY,
+          vx: Math.cos(angle) * speed + (Math.random() - 0.5) * 1.3,
+          vy: Math.sin(angle) * speed - Math.random() * 1.6,
+          gravity: 0.062 + Math.random() * 0.035,
+          drag: 0.986,
+          size: isHeart ? 6.5 + Math.random() * 5.5 : 5.5 + Math.random() * 6,
+          rotation: Math.random() * Math.PI * 2,
+          rotationSpeed: (Math.random() - 0.5) * 0.065,
+          swayPhase: Math.random() * Math.PI * 2,
+          swaySpeed: 0.03 + Math.random() * 0.03,
+          alpha: 0.98,
+          fade: 0.0055 + Math.random() * 0.0045,
+          color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
+          type: isHeart ? "heart" : "petal"
+        });
+      }
+
+      if (!animFrameId) {
+        animateParticles();
+      }
+    }
+
+    function drawHeart(ctx, size) {
+      const s = size * 0.12;
+      ctx.beginPath();
+      ctx.moveTo(0, 3 * s);
+      ctx.bezierCurveTo(0, 0, -5 * s, 0, -5 * s, 3 * s);
+      ctx.bezierCurveTo(-5 * s, 6 * s, 0, 8.5 * s, 0, 11 * s);
+      ctx.bezierCurveTo(0, 8.5 * s, 5 * s, 6 * s, 5 * s, 3 * s);
+      ctx.bezierCurveTo(5 * s, 0, 0, 0, 0, 3 * s);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function drawPetal(ctx, size) {
+      ctx.beginPath();
+      ctx.ellipse(0, 0, size * 0.9, size * 0.52, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.swayPhase += p.swaySpeed;
+        p.vx *= p.drag;
+        p.vy = p.vy * p.drag + p.gravity;
+
+        p.x += p.vx + Math.sin(p.swayPhase) * 0.45;
+        p.y += p.vy;
+        p.rotation += p.rotationSpeed;
+        p.alpha -= p.fade;
+
+        if (p.alpha <= 0 || p.y > window.innerHeight + 30) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.alpha);
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation);
+        ctx.fillStyle = p.color;
+
+        if (p.type === "heart") {
+          drawHeart(ctx, p.size);
+        } else {
+          drawPetal(ctx, p.size);
+        }
+        ctx.restore();
+      }
+
+      if (particles.length > 0) {
+        animFrameId = requestAnimationFrame(animateParticles);
+      } else {
+        animFrameId = null;
+      }
+    }
+
+    function triggerCuteMoment() {
+      // 1. Cycle to the next sweet whisper
+      whisperIndex = (whisperIndex + 1) % SWEET_WHISPERS.length;
+      whisperText.textContent = SWEET_WHISPERS[whisperIndex];
+
+      // 2. Show the floating whisper pill
+      whisperPill.classList.remove("whisper-hidden");
+      whisperPill.classList.add("whisper-visible");
+
+      // 3. Gentle pulse on the frosted countdown card & button icon
+      countdownCard.classList.add("pulse-gentle");
+      cuteIcon.style.transform = "scale(1.32)";
+      setTimeout(() => {
+        countdownCard.classList.remove("pulse-gentle");
+        cuteIcon.style.transform = "scale(1)";
+      }, 420);
+
+      // 4. Spawn luminous pastel petals & hearts from the button's exact coordinates
+      const rect = cuteBtn.getBoundingClientRect();
+      const originX = rect.left + rect.width / 2;
+      const originY = rect.top + rect.height / 2;
+      spawnPetalBurst(originX, originY);
+
+      // 5. Softly fade out the whisper pill after a few seconds
+      if (whisperTimer) clearTimeout(whisperTimer);
+      whisperTimer = setTimeout(() => {
+        whisperPill.classList.remove("whisper-visible");
+        whisperPill.classList.add("whisper-hidden");
+      }, 3600);
+    }
+
+    cuteBtn.addEventListener("click", triggerCuteMoment);
+  </script>
+</body>
+</html>
