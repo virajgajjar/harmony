@@ -215,21 +215,6 @@
       transform: translateY(0px) scale(1);
     }
 
-    /* Theme Switcher Dots */
-    .theme-dot {
-      width: 13px;
-      height: 13px;
-      border-radius: 9999px;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, opacity 0.3s ease;
-      opacity: 0.65;
-      cursor: pointer;
-    }
-    .theme-dot.active {
-      opacity: 1;
-      transform: scale(1.28);
-      box-shadow: 0 0 0 2.5px rgba(255, 255, 255, 0.95), 0 3px 8px rgba(220, 120, 140, 0.28);
-    }
-
     /* Subtle Colon Pulse */
     @keyframes softBlink {
       0%, 100% { opacity: 0.65; }
@@ -349,33 +334,7 @@
         </svg>
       </div>
 
-      <!-- Subtle 3-Dot Luminous Pastel Palette Switcher -->
-      <div class="w-16 flex items-center justify-end gap-2.5" aria-label="Theme Palette">
-        <button
-          type="button"
-          class="theme-dot active"
-          style="background: linear-gradient(135deg, #FF9EB1 50%, #88DFC6 50%);"
-          data-set-theme="botanical"
-          title="Rosewater & Peony"
-          aria-label="Rosewater & Peony Theme"
-        ></button>
-        <button
-          type="button"
-          class="theme-dot"
-          style="background: linear-gradient(135deg, #CFA8FF 50%, #FFAE94 50%);"
-          data-set-theme="aura"
-          title="Sunset Sorbet Aura"
-          aria-label="Sunset Sorbet Aura Theme"
-        ></button>
-        <button
-          type="button"
-          class="theme-dot"
-          style="background: linear-gradient(135deg, #F497A6 50%, #FFD67A 50%);"
-          data-set-theme="linen"
-          title="Terracotta & Marigold"
-          aria-label="Terracotta & Marigold Theme"
-        ></button>
-      </div>
+      <div class="w-16"></div>
     </header>
 
     <!-- 2. CENTER: PROMINENT FROSTED-GLASS LIVE COUNTDOWN CARD -->
@@ -543,33 +502,7 @@
     setInterval(updateCountdown, 1000);
 
     /******************************************************************
-     * 3. 3-DOT LUMINOUS PASTEL THEME SWITCHER
-     ******************************************************************/
-    const themeDots = document.querySelectorAll("[data-set-theme]");
-    const themeMeta = document.getElementById("theme-color-meta");
-
-    const THEME_META_COLORS = {
-      botanical: "#FFF9FA",
-      aura: "#FFFDF9",
-      linen: "#FFF9F2"
-    };
-
-    themeDots.forEach((dot) => {
-      dot.addEventListener("click", () => {
-        const chosen = dot.getAttribute("data-set-theme");
-        document.body.setAttribute("data-theme", chosen);
-
-        themeDots.forEach((d) => d.classList.remove("active"));
-        dot.classList.add("active");
-
-        if (themeMeta && THEME_META_COLORS[chosen]) {
-          themeMeta.setAttribute("content", THEME_META_COLORS[chosen]);
-        }
-      });
-    });
-
-    /******************************************************************
-     * 4. CUTE SURPRISE BUTTON: WHISPER PILL + LUMINOUS PETAL & HEART BURST
+     * 3. CUTE SURPRISE BUTTON: WHISPER PILL + LUMINOUS PETAL & HEART BURST
      ******************************************************************/
     const cuteBtn       = document.getElementById("cute-btn");
     const cuteIcon      = document.getElementById("cute-icon");
